@@ -20,16 +20,22 @@ int main(){
         p[i].rt = p[i].bt;
     }
 
-    int completed = 0, time = 0;
-    int idx, max_pr;
+    int completed = 0;
+    int time = 0;
 
     while(completed < n){
-        idx = -1;
-        max_pr = -1;
+
+        int idx = -1;
+        int max_pr = -100000;
 
         for(i=0;i<n;i++){
+
             if(p[i].at <= time && p[i].rt > 0){
-                if(p[i].pr > max_pr){
+
+                if(idx == -1 ||
+                   p[i].pr > max_pr ||
+                   (p[i].pr == max_pr && p[i].at < p[idx].at)){
+
                     max_pr = p[i].pr;
                     idx = i;
                 }
@@ -37,6 +43,7 @@ int main(){
         }
 
         if(idx != -1){
+
             p[idx].rt--;
             time++;
 
@@ -44,15 +51,17 @@ int main(){
                 p[idx].ct = time;
                 completed++;
             }
-        }
-        else{
+
+        }else{
             time++;
         }
     }
 
-    float avg_wt = 0, avg_tat = 0;
+    float avg_wt = 0;
+    float avg_tat = 0;
 
     for(i=0;i<n;i++){
+
         p[i].tat = p[i].ct - p[i].at;
         p[i].wt = p[i].tat - p[i].bt;
 
